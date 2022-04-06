@@ -14,6 +14,8 @@ import Settings from "src/pages/Settings";
 
 import { Address, DecoratedTx, DecoratedUtxo } from "src/types";
 
+import { getNewMnemonic, getMasterPrivateKey, getXpubFromPrivateKey, deriveChildPublicKey, getAddressFromChildPubkey } from "./utils/bitcoinjs-lib";
+
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [mnemonic, setMnemonic] = useState(""); // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -28,18 +30,56 @@ export default function App() {
   useEffect(() => {
     const getSeed = async () => {
       try {
-        throw new Error("Function not implemented yet");
+        let newMnemonic = "";
+        if (process.env.REACT_APP_MNEMONIC) {
+          newMnemonic = process.env.REACT_APP_MNEMONIC;
+        } else {
+          newMnemonic = getNewMnemonic();
+        }
+        setMnemonic(newMnemonic)
+        // Generate private key from the seed(mnemonic)
+        const currentPrivateKey = await getMasterPrivateKey(newMnemonic)
+        setMasterFingerprint(currentPrivateKey.fingerprint)
+        const derivationPath = "m/84'/0'/0'"; // P2WPKH
+        const currentXpub = getXpubFromPrivateKey(currentPrivateKey, derivationPath)
+        setXpub(currentXpub);
       } catch (e) {
         console.log(e);
       }
     };
     getSeed();
-  }, [mnemonic]);
+  }, []);
 
   // Addresses
   useEffect(() => {
     try {
-      throw new Error("Function not implemented yet");
+      const currentAddressBatch: Address[] = [];
+      for (let i = 0; i < 10; i++) {
+        const derivationPath = `0/${i}`;
+        const currentChildPubKey = deriveChildPublicKey(xpub, derivationPath)
+        const currentAddress = getAddressFromChildPubkey(currentChildPubKey);
+        currentAddressBatch.push({
+          ...currentAddress,
+          derivationPath,
+          masterFingerprint,
+        });
+      }
+      setAddresses(currentAddressBatch);
+
+      // get change addresses
+      const currentChangeAddressBatch: Address[] = [];
+      for (let i = 0; i < 10; i++) {
+        const derivationPath = `1/${i}`;
+        const currentChildPubKey = deriveChildPublicKey(xpub, derivationPath)
+        const currentAddress = getAddressFromChildPubkey(currentChildPubKey);
+        currentChangeAddressBatch.push({
+          ...currentAddress,
+          derivationPath,
+          masterFingerprint,
+        });
+      }
+      setChangeAddresses(currentChangeAddressBatch);
+
     } catch (e) {
       console.log(e);
     }
