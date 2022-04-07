@@ -26,6 +26,7 @@ export default function Send({ utxos, changeAddresses, mnemonic }: Props) {
   ) => {
     try {
       const psbt = await createTransasction(utxos, recipientAddress, amountToSend, changeAddresses[0]);
+      console.log("PSBT: ", psbt)
       setTransaction(psbt);
       setTransaction(await signTransaction(psbt, mnemonic));
       setStep(1);

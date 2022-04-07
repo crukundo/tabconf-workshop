@@ -104,6 +104,7 @@ export const signTransaction = async (
   psbt: Psbt,
   mnemonic: string
 ): Promise<Psbt> => {
+  console.log("mnemonic: ", mnemonic);
   const seed = await mnemonicToSeed(mnemonic);
   const root = bip32.fromSeed(seed, networks.testnet);
 

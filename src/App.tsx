@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { MenuIcon } from "@heroicons/react/outline";
 
@@ -44,6 +44,8 @@ export default function App() {
   const [transactions, setTransactions] = useState<DecoratedTx[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
   const [utxos, setUtxos] = useState<DecoratedUtxo[]>([]); // eslint-disable-line @typescript-eslint/no-unused-vars
 
+  const hackMnemonic = useMemo(() => getNewMnemonic(), [])
+
   // Mnemonic / Private Key / XPub
   useEffect(() => {
     const getSeed = async () => {
@@ -52,10 +54,10 @@ export default function App() {
         if (process.env.REACT_APP_MNEMONIC) {
           newMnemonic = process.env.REACT_APP_MNEMONIC;
         } else {
-          newMnemonic = getNewMnemonic();
+          newMnemonic = hackMnemonic;
         }
-        setMnemonic(mnemonic);
-        const newMasterPrivateKey = await getMasterPrivateKey(newMnemonic);
+        setMnemonic(newMnemonic);
+        const newMasterPrivateKey = await getMasterPrivateKey(mnemonic);
         setMasterFingerprint(newMasterPrivateKey.fingerprint);
         const derivationPath = "m/84'/0'/0'"; // P2WPKH
         const newXpub = getXpubFromPrivateKey(
@@ -68,7 +70,7 @@ export default function App() {
       }
     };
     getSeed();
-  });
+  }, [hackMnemonic, mnemonic]);
 
   // Addresses
   useEffect(() => {
