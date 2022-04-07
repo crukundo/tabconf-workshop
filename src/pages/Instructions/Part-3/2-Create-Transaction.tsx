@@ -10,7 +10,6 @@ export const createTransasction = async (
   changeAddress: Address
 ) => {
   const feeRate = await getFeeRates();
-
   const { inputs, outputs, fee } = coinselect(
     utxos,
     [
@@ -21,13 +20,10 @@ export const createTransasction = async (
     ],
     feeRate["1"]
   );
-
   if (!inputs || !outputs) throw new Error("Unable to construct transaction");
-
   const psbt = new Psbt({ network: networks.testnet });
   psbt.setVersion(2); // These are defaults. This line is not needed.
   psbt.setLocktime(0); // These are defaults. This line is not needed.
-
   inputs.forEach((input) => {
     psbt.addInput({
       hash: input.txid,
@@ -40,19 +36,16 @@ export const createTransasction = async (
       bip32Derivation: input.bip32Derivation,
     });
   });
-
   outputs.forEach((output) => {
     // coinselect doesnt apply address to change output, so add it here
     if (!output.address) {
       output.address = changeAddress.address!;
     }
-
     psbt.addOutput({
       address: output.address,
       value: output.value,
     });
   });
-
   return psbt;
 };
 `;

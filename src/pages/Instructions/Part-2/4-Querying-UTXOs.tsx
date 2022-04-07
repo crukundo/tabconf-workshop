@@ -38,12 +38,12 @@ export default function QueryingUTXOs() {
         </p>
         {/* prettier-ignore */}
         <CodeBlock>
-            import axios from 'axios'; {"\n"}
-            {"\n"}
-            const BASE_URL = 'https://blockstream.info/testnet/api/address/';{"\n"}
-            const &#123; data &#125; = await axios.get(`$&#123;BASE_URL&#125;/$&#123;address&#125;/utxo`);{"\n"}
-            {"\n"}
-            console.log('data'){"\n"}
+          import axios from 'axios'; {"\n"}
+          {"\n"}
+          const BASE_URL = 'https://blockstream.info/testnet/api/address/';{"\n"}
+          const &#123; data &#125; = await axios.get(`$&#123;BASE_URL&#125;/$&#123;address&#125;/utxo`);{"\n"}
+          {"\n"}
+          console.log('data'){"\n"}
         </CodeBlock>
       </div>
     </Section>
