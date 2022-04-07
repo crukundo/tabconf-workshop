@@ -1,14 +1,9 @@
-import { BIP32Interface } from "bip32";
-import { payments, Psbt } from "bitcoinjs-lib";
+import { generateMnemonic, mnemonicToSeed } from "bip39";
+import { BIP32Interface, fromSeed } from "bip32";
+import { payments, Psbt, bip32, networks } from "bitcoinjs-lib";
+import coinselect from "coinselect";
 
 import { Address, DecoratedUtxo } from "src/types";
-
-import { generateMnemonic, mnemonicToSeed } from "bip39"
-
-import { fromSeed, fromBase58 } from 'bip32';
-import { networks } from 'bitcoinjs-lib';
-
-import coinselect from "coinselect";
 
 export const getNewMnemonic = (): string => {
   const mnemonic = generateMnemonic(256);
@@ -19,8 +14,7 @@ export const getMasterPrivateKey = async (
   mnemonic: string
 ): Promise<BIP32Interface> => {
   const seed = await mnemonicToSeed(mnemonic);
-  const privateKey = fromSeed(seed, networks.bitcoin);
-
+  const privateKey = fromSeed(seed, networks.testnet);
   return privateKey;
 };
 
@@ -37,29 +31,27 @@ export const deriveChildPublicKey = (
   xpub: string,
   derivationPath: string
 ): BIP32Interface => {
-  const node = fromBase58(xpub, networks.bitcoin);
+  const node = bip32.fromBase58(xpub, networks.testnet);
   const child = node.derivePath(derivationPath);
   return child;
 };
 
 export const getAddressFromChildPubkey = (
-  child: BIP32Interface
+  child: bip32.BIP32Interface
 ): payments.Payment => {
-
   const address = payments.p2wpkh({
     pubkey: child.publicKey,
-    network: networks.bitcoin,
+    network: networks.testnet,
   });
-
   return address;
 };
 
-export const createTransaction = async (
+export const createTransasction = async (
   utxos: DecoratedUtxo[],
   recipientAddress: string,
   amountInSatoshis: number,
   changeAddress: Address
-): Promise<Psbt> => {
+) => {
   // const feeRate = await getFeeRates();
 
   const { inputs, outputs, fee } = coinselect(
@@ -70,13 +62,13 @@ export const createTransaction = async (
         value: amountInSatoshis,
       },
     ],
-    1 // feeRate
+    1
   );
 
   if (!inputs || !outputs) throw new Error("Unable to construct transaction");
   if (fee > amountInSatoshis) throw new Error("Fee is too high!");
 
-  const psbt = new Psbt({ network: networks.bitcoin });
+  const psbt = new Psbt({ network: networks.testnet });
   psbt.setVersion(2); // These are defaults. This line is not needed.
   psbt.setLocktime(0); // These are defaults. This line is not needed.
 
@@ -109,13 +101,14 @@ export const createTransaction = async (
 };
 
 export const signTransaction = async (
-  psbt: any,
+  psbt: Psbt,
   mnemonic: string
 ): Promise<Psbt> => {
   const seed = await mnemonicToSeed(mnemonic);
-  const root = fromSeed(seed, networks.bitcoin);
+  const root = bip32.fromSeed(seed, networks.testnet);
 
   psbt.signAllInputsHD(root);
+  psbt.validateSignaturesOfAllInputs();
   psbt.finalizeAllInputs();
   return psbt;
 };
