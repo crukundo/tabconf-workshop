@@ -24,7 +24,7 @@ export const createTransasction = async (
 
   if (!inputs || !outputs) throw new Error("Unable to construct transaction");
 
-  const psbt = new Psbt({ network: networks.bitcoin });
+  const psbt = new Psbt({ network: networks.testnet });
   psbt.setVersion(2); // These are defaults. This line is not needed.
   psbt.setLocktime(0); // These are defaults. This line is not needed.
 

@@ -5,7 +5,7 @@ import { Section } from "src/pages/Instructions/components";
 const code = `
 export const signTransaction = async (psbt: Psbt, mnemonic: string) => {
   const seed = await mnemonicToSeed(mnemonic);
-  const root = bip32.fromSeed(seed, networks.bitcoin);
+  const root = bip32.fromSeed(seed, networks.testnet);
 
   psbt.signAllInputsHD(root);
   psbt.finalizeAllInputs();

@@ -11,7 +11,7 @@ export default function QueryingTransactions() {
         <p>
           In order to query transactions associated with an address, we will
           make a GET request to
-          <code>https://blockstream.info/api/address/OUR_ADDRESS/txs</code>{" "}
+          <code>https://blockstream.info/testnet/api/address/OUR_ADDRESS/txs</code>{" "}
           using axios.
         </p>
 
@@ -23,7 +23,7 @@ export default function QueryingTransactions() {
         <CodeBlock>
             import axios from 'axios'; {"\n"}
             {"\n"}
-            const BASE_URL = 'https://blockstream.info/api/address';{"\n"}
+            const BASE_URL = 'https://blockstream.info/testnet/api/address';{"\n"}
             const &#123; data &#125; = await axios.get(`$&#123;BASE_URL&#125;/$&#123;address&#125;/txs`);{"\n"}
             {"\n"}
             console.log('data'){"\n"}

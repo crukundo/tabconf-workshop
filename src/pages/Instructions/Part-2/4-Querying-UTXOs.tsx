@@ -27,7 +27,7 @@ export default function QueryingUTXOs() {
           In order to query UTXOs associated with an address, we will make a GET
           request to
           <code>
-            https://blockstream.info/api/address/OUR_ADDRESS/utxo
+            https://blockstream.info/testnet/api/address/OUR_ADDRESS/utxo
           </code>{" "}
           using axios.
         </p>
@@ -40,7 +40,7 @@ export default function QueryingUTXOs() {
         <CodeBlock>
             import axios from 'axios'; {"\n"}
             {"\n"}
-            const BASE_URL = 'https://blockstream.info/api/address/';{"\n"}
+            const BASE_URL = 'https://blockstream.info/testnet/api/address/';{"\n"}
             const &#123; data &#125; = await axios.get(`$&#123;BASE_URL&#125;/$&#123;address&#125;/utxo`);{"\n"}
             {"\n"}
             console.log('data'){"\n"}

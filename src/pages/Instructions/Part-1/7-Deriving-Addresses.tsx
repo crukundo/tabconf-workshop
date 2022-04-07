@@ -23,7 +23,7 @@ export default function DerivingAddress() {
           {"\n"}
           const address = payments.p2wpkh(&#123; {"\n"}
             pubkey: child.publicKey, {"\n"}
-            network: networks.bitcoin, {"\n"}
+            network: networks.testnet, {"\n"}
             &#125;); {"\n"}
           {"\n"}
           return address;

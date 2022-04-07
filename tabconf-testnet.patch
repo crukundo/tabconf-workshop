@@ -1,0 +1,122 @@
+diff --git a/src/pages/Instructions/Part-1/3-Deriving-Private-Key.tsx b/src/pages/Instructions/Part-1/3-Deriving-Private-Key.tsx
+index 4d68c47..15a465a 100644
+--- a/src/pages/Instructions/Part-1/3-Deriving-Private-Key.tsx
++++ b/src/pages/Instructions/Part-1/3-Deriving-Private-Key.tsx
+@@ -29,7 +29,7 @@ export default function DerivingPrivateKey() {
+             import &#123; mnemonicToSeed &#125; from 'bip39'; {"\n"}
+             ... {"\n"}
+             const seed = await mnemonicToSeed(mnemonic); {"\n"}
+-            const privateKey = fromSeed(seed, networks.bitcoin); {"\n"}
++            const privateKey = fromSeed(seed, networks.testnet); {"\n"}
+             {"\n"}
+             console.log(privateKey.toBase58()); {"\n"}
+             // xprv9s21ZrQH143K3fyh9nwMnoCjCnqpcrqkNWcy3NUDAyi32qmQBZJ2Zw856N7ruBr4dbCwqHYjozuryVKHQfox4XzVescETg6Uqwa1dCxExWx {"\n"}
+diff --git a/src/pages/Instructions/Part-1/6-Deriving-ChildPubKey.tsx b/src/pages/Instructions/Part-1/6-Deriving-ChildPubKey.tsx
+index 3cad7df..f87eb74 100644
+--- a/src/pages/Instructions/Part-1/6-Deriving-ChildPubKey.tsx
++++ b/src/pages/Instructions/Part-1/6-Deriving-ChildPubKey.tsx
+@@ -16,7 +16,7 @@ export default function DerivingChildPubKey() {
+ 
+         {/* prettier-ignore */}
+         <CodeBlock>
+-        const node = bip32.fromBase58(xpub, networks.bitcoin); {"\n"}
++        const node = bip32.fromBase58(xpub, networks.testnet); {"\n"}
+         const child = node.derivePath(derivationPath); {"\n"}
+         return child;
+           </CodeBlock>
+diff --git a/src/pages/Instructions/Part-1/7-Deriving-Addresses.tsx b/src/pages/Instructions/Part-1/7-Deriving-Addresses.tsx
+index 2a36a6e..a5930b0 100644
+--- a/src/pages/Instructions/Part-1/7-Deriving-Addresses.tsx
++++ b/src/pages/Instructions/Part-1/7-Deriving-Addresses.tsx
+@@ -23,7 +23,7 @@ export default function DerivingAddress() {
+           {"\n"}
+           const address = payments.p2wpkh(&#123; {"\n"}
+             pubkey: child.publicKey, {"\n"}
+-            network: networks.bitcoin, {"\n"}
++            network: networks.testnet, {"\n"}
+             &#125;); {"\n"}
+           {"\n"}
+           return address;
+diff --git a/src/pages/Instructions/Part-2/2-Querying-Transactions.tsx b/src/pages/Instructions/Part-2/2-Querying-Transactions.tsx
+index c7f30e9..3fb52ea 100644
+--- a/src/pages/Instructions/Part-2/2-Querying-Transactions.tsx
++++ b/src/pages/Instructions/Part-2/2-Querying-Transactions.tsx
+@@ -11,7 +11,7 @@ export default function QueryingTransactions() {
+         <p>
+           In order to query transactions associated with an address, we will
+           make a GET request to
+-          <code>https://blockstream.info/api/address/OUR_ADDRESS/txs</code>{" "}
++          <code>https://blockstream.info/testnet/api/address/OUR_ADDRESS/txs</code>{" "}
+           using axios.
+         </p>
+ 
+@@ -23,7 +23,7 @@ export default function QueryingTransactions() {
+         <CodeBlock>
+             import axios from 'axios'; {"\n"}
+             {"\n"}
+-            const BASE_URL = 'https://blockstream.info/api/address';{"\n"}
++            const BASE_URL = 'https://blockstream.info/testnet/api/address';{"\n"}
+             const &#123; data &#125; = await axios.get(`$&#123;BASE_URL&#125;/$&#123;address&#125;/txs`);{"\n"}
+             {"\n"}
+             console.log('data'){"\n"}
+diff --git a/src/pages/Instructions/Part-2/4-Querying-UTXOs.tsx b/src/pages/Instructions/Part-2/4-Querying-UTXOs.tsx
+index 6ca7618..6685344 100644
+--- a/src/pages/Instructions/Part-2/4-Querying-UTXOs.tsx
++++ b/src/pages/Instructions/Part-2/4-Querying-UTXOs.tsx
+@@ -27,7 +27,7 @@ export default function QueryingUTXOs() {
+           In order to query UTXOs associated with an address, we will make a GET
+           request to
+           <code>
+-            https://blockstream.info/api/address/OUR_ADDRESS/utxo
++            https://blockstream.info/testnet/api/address/OUR_ADDRESS/utxo
+           </code>{" "}
+           using axios.
+         </p>
+@@ -40,7 +40,7 @@ export default function QueryingUTXOs() {
+         <CodeBlock>
+             import axios from 'axios'; {"\n"}
+             {"\n"}
+-            const BASE_URL = 'https://blockstream.info/api/address/';{"\n"}
++            const BASE_URL = 'https://blockstream.info/testnet/api/address/';{"\n"}
+             const &#123; data &#125; = await axios.get(`$&#123;BASE_URL&#125;/$&#123;address&#125;/utxo`);{"\n"}
+             {"\n"}
+             console.log('data'){"\n"}
+diff --git a/src/pages/Instructions/Part-3/2-Create-Transaction.tsx b/src/pages/Instructions/Part-3/2-Create-Transaction.tsx
+index 2924ff9..b162a1e 100644
+--- a/src/pages/Instructions/Part-3/2-Create-Transaction.tsx
++++ b/src/pages/Instructions/Part-3/2-Create-Transaction.tsx
+@@ -24,7 +24,7 @@ export const createTransasction = async (
+ 
+   if (!inputs || !outputs) throw new Error("Unable to construct transaction");
+ 
+-  const psbt = new Psbt({ network: networks.bitcoin });
++  const psbt = new Psbt({ network: networks.testnet });
+   psbt.setVersion(2); // These are defaults. This line is not needed.
+   psbt.setLocktime(0); // These are defaults. This line is not needed.
+ 
+diff --git a/src/pages/Instructions/Part-3/3-Sign-Transaction.tsx b/src/pages/Instructions/Part-3/3-Sign-Transaction.tsx
+index d722c91..45a3557 100644
+--- a/src/pages/Instructions/Part-3/3-Sign-Transaction.tsx
++++ b/src/pages/Instructions/Part-3/3-Sign-Transaction.tsx
+@@ -5,7 +5,7 @@ import { Section } from "src/pages/Instructions/components";
+ const code = `
+ export const signTransaction = async (psbt: Psbt, mnemonic: string) => {
+   const seed = await mnemonicToSeed(mnemonic);
+-  const root = bip32.fromSeed(seed, networks.bitcoin);
++  const root = bip32.fromSeed(seed, networks.testnet);
+ 
+   psbt.signAllInputsHD(root);
+   psbt.finalizeAllInputs();
+diff --git a/src/pages/Send/components/TransactionSuccessAlert.tsx b/src/pages/Send/components/TransactionSuccessAlert.tsx
+index 1c5240a..4e983e2 100644
+--- a/src/pages/Send/components/TransactionSuccessAlert.tsx
++++ b/src/pages/Send/components/TransactionSuccessAlert.tsx
+@@ -28,7 +28,7 @@ const TransactionSuccessAlert = ({ txid }: Props) => {
+           <div className="mt-4">
+             <div className="-mx-2 -my-1.5 flex">
+               <a
+-                href={`https://blockstream.info/tx/${txid}`}
++                href={`https://blockstream.info/testnet/tx/${txid}`}
+                 rel="noreferrer"
+                 target="_blank"
+                 className="bg-green-50 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50 focus:ring-green-600"

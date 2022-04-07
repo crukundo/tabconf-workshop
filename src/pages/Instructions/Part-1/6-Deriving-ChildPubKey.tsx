@@ -16,7 +16,7 @@ export default function DerivingChildPubKey() {
 
         {/* prettier-ignore */}
         <CodeBlock>
-        const node = bip32.fromBase58(xpub, networks.bitcoin); {"\n"}
+        const node = bip32.fromBase58(xpub, networks.testnet); {"\n"}
         const child = node.derivePath(derivationPath); {"\n"}
         return child;
           </CodeBlock>

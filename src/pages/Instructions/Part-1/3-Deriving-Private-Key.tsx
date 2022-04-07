@@ -29,7 +29,7 @@ export default function DerivingPrivateKey() {
             import &#123; mnemonicToSeed &#125; from 'bip39'; {"\n"}
             ... {"\n"}
             const seed = await mnemonicToSeed(mnemonic); {"\n"}
-            const privateKey = fromSeed(seed, networks.bitcoin); {"\n"}
+            const privateKey = fromSeed(seed, networks.testnet); {"\n"}
             {"\n"}
             console.log(privateKey.toBase58()); {"\n"}
             // xprv9s21ZrQH143K3fyh9nwMnoCjCnqpcrqkNWcy3NUDAyi32qmQBZJ2Zw856N7ruBr4dbCwqHYjozuryVKHQfox4XzVescETg6Uqwa1dCxExWx {"\n"}
